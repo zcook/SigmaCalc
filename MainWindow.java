@@ -1,5 +1,5 @@
 /**
- * Main Window for E-Assist App
+ * Main Window for Program
  * Initializes all internal applications (CalPlanner, UnitConverter etc...)
  * Calls all necessary methods located in other classes to perform required actions
  * Created by Zane Cook on 5/15/2015.
@@ -39,7 +39,9 @@ public class MainWindow extends JFrame{
     //Splash Screen Label
     JLabel splashScreen;
 
+    private String programName = "SigmaCalc";
     private String versionNumber = "1.0.2";
+    private int scaleFactor = 1; //Scale Factor to add high DPI support
 
 
 
@@ -150,7 +152,7 @@ public class MainWindow extends JFrame{
 
         MainWindowOnClick mainWindowOnClick = new MainWindowOnClick();
 
-        window =  new Window("E-Assist",400,400);
+        window =  new Window(programName,400,400);
         window.setDefaultCloseOperation (WindowConstants.EXIT_ON_CLOSE);
 
         setIcon();
@@ -171,7 +173,7 @@ public class MainWindow extends JFrame{
 
         contentPane.add(mainPanel);
 
-        addSplashScreen(); // adds the E-Assist Logo
+        addSplashScreen(); // adds the program Logo
 
         window.setJMenuBar(menuBar);
 
@@ -201,12 +203,12 @@ public class MainWindow extends JFrame{
     }
 
 
-    //Adds the E-Assist Logo as a splash screen on the main window.
+    //Adds the Program Logo as a splash screen on the main window.
     private void addSplashScreen(){
 
         BufferedImage image = null;
         try {
-            image = ImageIO.read(window.getClass().getResource("/Splash Screen Icon.png"));
+            image = ImageIO.read(window.getClass().getResource("/Splash Screen Logo.png"));
         }
         catch (IOException e){
             e.printStackTrace();
@@ -245,7 +247,7 @@ public class MainWindow extends JFrame{
         UnitConverterOnClick unitConverterOnClick = new UnitConverterOnClick();
 
 
-        window.setTitle("E-Assist (Unit Converter)");
+        window.setTitle(programName + " (Unit Converter)");
 
         //Removing any existing components
         menuBar.removeAll();
@@ -440,7 +442,7 @@ public class MainWindow extends JFrame{
         CalPlannerOnTab calPlannerOnTab = new CalPlannerOnTab();
         CalPlannerOnEnter calPlannerOnEnter = new CalPlannerOnEnter();
 
-        window.setTitle("E-Assist (CalPlanner)");
+        window.setTitle(programName + " (CalPlanner)");
 
         //Removing any existing components
         menuBar.removeAll();
@@ -877,8 +879,8 @@ public class MainWindow extends JFrame{
             }
 
             else if (e.getSource()== aboutMenuItem){
-                JOptionPane.showMessageDialog(null," E-Assist Version "+ versionNumber +" \n A multi application tool to"+
-                        " assist with everyday calculations / conversions.","About E-Assist", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null,programName +" Version "+ versionNumber +" \n A multi application suite to"+
+                        " assist with everyday calculations / conversions.","About "+programName, JOptionPane.PLAIN_MESSAGE);
             }
 
         }
