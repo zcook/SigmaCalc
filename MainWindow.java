@@ -41,7 +41,7 @@ public class MainWindow extends JFrame{
 
     private String programName = "SigmaCalc";
     private String versionNumber = "1.0.2";
-    private int scaleFactor = 1; //Scale Factor to add high DPI support
+
 
 
 
