@@ -7,9 +7,7 @@
  * Created by Zane Cook on 5/15/2015.
  */
 
-import javafx.application.*;
-import javafx.scene.*;
-import javafx.stage.*;
+import javax.swing.JFrame;
 
 public class Main {
 
