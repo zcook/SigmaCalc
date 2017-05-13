@@ -4,7 +4,7 @@
  * Created by Zane Cook on 5/15/2015.
  */
 
-import javax.swing.*;
+
 
 
 public class UnitConverter {
@@ -121,7 +121,7 @@ public class UnitConverter {
 
         }
         catch(Exception e){
-            JOptionPane.showMessageDialog(null,"Input must be a number ","Input Error",JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error will need a dialog box here");
         }
 
     }
