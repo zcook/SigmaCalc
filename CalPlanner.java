@@ -1,4 +1,4 @@
-import javax.swing.*;
+
 import java.time.Year;
 import java.util.Calendar;
 import java.util.StringJoiner;
@@ -72,7 +72,7 @@ import java.util.StringJoiner;
 
         catch (Exception e){
 
-            JOptionPane.showMessageDialog(null,"Invalid Input:\n Please Enter Whole Numbers for Lead Time");
+            System.out.println("Error Will need a dialog box here");
         }
     }
 
@@ -309,7 +309,7 @@ import java.util.StringJoiner;
                 catch (Exception e) {
 
                     if (!hasDialogDisplayed) {
-                        JOptionPane.showMessageDialog(null, "Input Must Be in Number Date Format\n MM/DD/YYYY");
+                        System.out.println("Error Will need a dialog box here");
                         hasDialogDisplayed = true;
                     }
 
@@ -349,7 +349,7 @@ import java.util.StringJoiner;
             //the dialog from appearing twice, once for each textField startDate and endDate
             if(parsedDate.length < 2){
                 if (!hasDialogDisplayed ) {
-                    JOptionPane.showMessageDialog(null, "Invalid Input.\n Enter Date in MM/DD/YYYY Format");
+                    System.out.println("Error Will need a dialog box here");
                     hasDialogDisplayed = true;
                 }
             }
@@ -391,7 +391,7 @@ import java.util.StringJoiner;
                     else{
                         year = 0;
                         if (!hasDialogDisplayed) {
-                            JOptionPane.showMessageDialog(null, "Invalid Input.\n Enter Date in MM/DD/YYYY Format");
+                            System.out.println("Error Will need a dialog box here");
                             hasDialogDisplayed = true;
                         }
                     }
@@ -400,7 +400,7 @@ import java.util.StringJoiner;
                 //if the user input non-numeric characters, such as Jan, prompts them with a dialog describing
                 //the correct input format
                 catch (Exception e){
-                    JOptionPane.showMessageDialog(null,"Input Must Be in Number Date Format\n MM/DD/YYYY");
+                    System.out.println("Error Will need a dialog box here");
                 }
             }
 
@@ -433,7 +433,7 @@ import java.util.StringJoiner;
                 else{
                     year = 0;
                     if (!hasDialogDisplayed) {
-                        JOptionPane.showMessageDialog(null, "Invalid Input.\n Enter Date in MM/DD/YYYY Format");
+                        System.out.println("Error Will need a dialog box here");
                         hasDialogDisplayed = true;
                     }
                 }
@@ -443,7 +443,7 @@ import java.util.StringJoiner;
             //if the user input non-numeric characters, such as Jan, prompts them with a dialog describing
             //the correct input format
             catch (Exception e){
-                JOptionPane.showMessageDialog(null,"Input Must Be in Number Date Format\n MM/DD/YYYY");
+                System.out.println("Error Will need a dialog box here");
             }
         }
 
