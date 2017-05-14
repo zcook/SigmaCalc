@@ -26,7 +26,8 @@ import javafx.scene.*;
         messageBoxLayout = new BorderPane();
         messageBoxLayout.setCenter(msg);
         messageBoxLayout.setBottom(okButton);
-        messageBoxLayout.setAlignment(okButton, Pos.CENTER);
+        okButton.setMinSize(60,15);
+        messageBoxLayout.setAlignment(okButton,Pos.TOP_CENTER);
 
         messageBoxScene = new Scene(messageBoxLayout);
 
