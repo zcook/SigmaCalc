@@ -30,12 +30,14 @@ public class Main extends Application{
         String programTitle = "SigmaCalc";
 
 
-        mainWindow.setScene(SceneBuilder.BuildMainWindowScene());
+        mainWindow.setScene(SceneBuilder.BuildMainWindowScene(mainWindow));
         mainWindow.setTitle(programTitle);
 
         mainWindow.show();
 
     }
+
+
 
     }
 
