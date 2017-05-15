@@ -13,12 +13,14 @@ import javafx.scene.*;
  class MessageBox {
 
    private static Stage messageBox;
-   private static Scene messageBoxScene;
-   private static BorderPane messageBoxLayout;
-   private static Label msg;
-   private static Button okButton;
+
 
      static void show(String message, String title){
+
+         Scene messageBoxScene;
+         BorderPane messageBoxLayout;
+         Label msg;
+         Button okButton;
 
         okButton = new Button("OK");
         msg = new Label(message);

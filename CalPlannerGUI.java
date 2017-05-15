@@ -1,11 +1,13 @@
 import javafx.scene.Scene;
+import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
  * Created by Zane on 5/14/2017.
  */
-public class CalPlannerGUI {
+
+ class CalPlannerGUI {
 
    private Stage mainWindow;
 
@@ -16,11 +18,7 @@ public class CalPlannerGUI {
         //Main Window Components
         Scene CalPlannerScene;
         BorderPane startSceneBorderLayout;
-        javafx.scene.control.MenuBar menuBar;
-        javafx.scene.control.Menu applicationMenu;
-        javafx.scene.control.Menu helpMenu;
-        javafx.scene.control.MenuItem unitConverter;
-        javafx.scene.control.MenuItem aboutMenu;
+
 
         javafx.scene.control.Label splashScreen;
 
@@ -32,6 +30,27 @@ public class CalPlannerGUI {
         splashScreen = new javafx.scene.control.Label("CalPlannerGUI");
         startSceneBorderLayout = new BorderPane();
 
+
+
+        //Build Scene
+        startSceneBorderLayout.setTop(BuildMenuBar());
+        startSceneBorderLayout.setCenter(splashScreen);
+        CalPlannerScene = new Scene(startSceneBorderLayout, mainWindowWidth, mainWindowHeight);
+
+
+
+
+        return CalPlannerScene;
+    }
+
+    private MenuBar BuildMenuBar(){
+
+        javafx.scene.control.MenuBar menuBar;
+        javafx.scene.control.Menu applicationMenu;
+        javafx.scene.control.Menu helpMenu;
+        javafx.scene.control.MenuItem unitConverter;
+        javafx.scene.control.MenuItem aboutMenu;
+
         //Initialize Menu Items
         menuBar = new javafx.scene.control.MenuBar();
         applicationMenu = new javafx.scene.control.Menu("Application");
@@ -39,21 +58,26 @@ public class CalPlannerGUI {
         unitConverter = new javafx.scene.control.MenuItem("Unit Converter");
         aboutMenu = new javafx.scene.control.MenuItem("About");
 
-        //Build Scene
-        startSceneBorderLayout.setTop(menuBar);
-        startSceneBorderLayout.setCenter(splashScreen);
-        CalPlannerScene = new Scene(startSceneBorderLayout, mainWindowWidth, mainWindowHeight);
-
-
         //Build Menus
         menuBar.getMenus().addAll(applicationMenu, helpMenu);
         applicationMenu.getItems().addAll(unitConverter);
         helpMenu.getItems().addAll(aboutMenu);
 
 
-        unitConverter.setOnAction(event -> mainWindow.setScene(SceneBuilder.BuildUnitConverterScene(mainWindow)));
-        aboutMenu.setOnAction(event -> MessageBox.show("about selected", "Message Box"));
+        unitConverter.setOnAction(event -> UnitConverterMenu_OnClick());
+        aboutMenu.setOnAction(event -> AboutMenu_OnClick());
 
-        return CalPlannerScene;
+        return menuBar;
     }
+
+    private void UnitConverterMenu_OnClick(){
+
+        mainWindow.setScene(SceneBuilder.BuildUnitConverterScene(mainWindow));
+    }
+
+    private void AboutMenu_OnClick(){
+
+        MessageBox.show("about selected", "Message Box");
+    }
+
 }
