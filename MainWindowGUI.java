@@ -82,6 +82,6 @@ import javafx.stage.Stage;
 
     private void AboutMenu_OnClick(){
 
-        MessageBox.show("about selected","Message Box");
+        MessageBox.show("About selected","Message Box");
     }
 }
