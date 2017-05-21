@@ -2,6 +2,7 @@
  * Created by Zane on 5/13/2017.
  */
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,6 +24,7 @@ import javafx.scene.*;
          Button okButton;
 
         okButton = new Button("OK");
+
         msg = new Label(message);
 
         messageBoxLayout = new BorderPane();
@@ -30,6 +32,7 @@ import javafx.scene.*;
         messageBoxLayout.setBottom(okButton);
         okButton.setMinSize(60,15);
         messageBoxLayout.setAlignment(okButton,Pos.TOP_CENTER);
+        messageBoxLayout.setPadding(new Insets(10,10,10,10));
 
         messageBoxScene = new Scene(messageBoxLayout);
 
@@ -38,8 +41,8 @@ import javafx.scene.*;
 
         messageBox.setTitle(title);
         messageBox.setScene(messageBoxScene);
-        messageBox.setMinHeight(200);
-        messageBox.setMinWidth(400);
+        messageBox.setMinHeight(150);
+        messageBox.setMinWidth(200);
         messageBox.initModality(Modality.APPLICATION_MODAL);
 
 
