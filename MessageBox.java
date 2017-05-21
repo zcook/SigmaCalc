@@ -15,7 +15,7 @@ import javafx.scene.*;
    private static Stage messageBox;
 
 
-     static void show(String message, String title){
+     static void show(String title, String message){
 
          Scene messageBoxScene;
          BorderPane messageBoxLayout;

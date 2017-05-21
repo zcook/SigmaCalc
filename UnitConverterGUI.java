@@ -1,9 +1,14 @@
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -18,9 +23,17 @@ import java.util.ArrayList;
 
    private Stage mainWindow;
 
-    private ComboBox fromUnits = new ComboBox();
-    private ComboBox toUnits = new ComboBox();
+    private ComboBox fromUnitsComboBox = new ComboBox();
+    private ComboBox toUnitsComboBox = new ComboBox();
+    private ComboBox precisionComboBox;
     private Label applicationTitle;
+    private Label resultUnitsLabel;
+    private Label inputUnitsLabel ;
+    private TextField valueInputBox;
+    private Label resultsLabel;
+    private String conversionType;
+    private Label conversionFormula;
+
 
     Scene BuildUnitConverterGUI(Stage window) {
 
@@ -43,9 +56,10 @@ import java.util.ArrayList;
 
 
        //Build Scene
-       startSceneBorderLayout.setTop(BuildMenuBar());
-       startSceneBorderLayout.setCenter(BuildUserInterface());
+       startSceneBorderLayout.setTop(MenuBarLayout());
+       startSceneBorderLayout.setCenter(UserInterfaceLayout());
        UnitConverterScene = new Scene(startSceneBorderLayout, mainWindowWidth, mainWindowHeight);
+       UnitConverterScene.getStylesheets().add("UnitConverterGUI.css");
         mainWindow.setMinHeight(420);
         mainWindow.setMinWidth(400);
 
@@ -53,7 +67,7 @@ import java.util.ArrayList;
 
         }
 
-   private MenuBar BuildMenuBar(){
+   private MenuBar MenuBarLayout(){
 
       javafx.scene.control.MenuBar menuBar;
       javafx.scene.control.Menu applicationMenu;
@@ -100,7 +114,7 @@ import java.util.ArrayList;
       return menuBar;
    }
 
-   private VBox BuildUserInterface(){
+   private VBox UserInterfaceLayout(){
 
       applicationTitle = new Label("Unit Converter");
 
@@ -110,27 +124,27 @@ import java.util.ArrayList;
 
 
       applicationTitle.setAlignment(Pos.BASELINE_CENTER);
-      applicationTitle.setFont(Font.font(18));
+      applicationTitle.getStyleClass().add("label-applicationTitle");
       userInterface.setAlignment(Pos.BASELINE_CENTER);
       formulaSeparator.setOrientation(Orientation.HORIZONTAL);
-      formulaSeparator.setPadding(new Insets(30,0,10,0));
+      formulaSeparator.setPadding(new Insets(10,0,10,0));
 
       userInterface.getChildren().add(applicationTitle);
-      userInterface.getChildren().add(BuildComboBoxesLayout());
+      userInterface.getChildren().add(UnitsComboBoxesLayout());
+      userInterface.getChildren().add(new Region());
       userInterface.getChildren().add(InputAndResultsLayout());
       userInterface.getChildren().add(formulaSeparator);
-      userInterface.getChildren().add(BuildConversionFormulaLayout());
+      userInterface.getChildren().add(ConversionFormulaLayout());
       userInterface.getChildren().add(CalculateAndSwapButtonLayout());
-
 
       return userInterface;
    }
 
-   private HBox BuildComboBoxesLayout(){
+   private HBox UnitsComboBoxesLayout(){
 
       HBox InputBoxLayout = new HBox(10);
 
-      InputBoxLayout.getChildren().addAll(BuildFromUnitComboBoxLayout(), BuildPrecisionComboBoxLayout(), BuildToUnitComboBoxLayout());
+      InputBoxLayout.getChildren().addAll(FromUnitComboBoxLayout(), PrecisionComboBoxLayout(),ToUnitComboBoxLayout());
       InputBoxLayout.setAlignment(Pos.TOP_CENTER);
        InputBoxLayout.setPadding(new Insets(0,10,0,10));
 
@@ -138,98 +152,140 @@ import java.util.ArrayList;
 
    }
 
-   private VBox BuildFromUnitComboBoxLayout() {
-
-
+   private VBox FromUnitComboBoxLayout() {
 
       Label fromUnitsLabel = new Label();
 
       VBox fromUnitComboBoxLayout = new VBox(0);
 
       fromUnitsLabel.setText("From");
-      fromUnits.setMinWidth(120);
+      fromUnitsLabel.getStyleClass().add("label-general");
+
+      fromUnitsComboBox.setMinWidth(120);
 
 
-      fromUnitComboBoxLayout.getChildren().addAll(fromUnitsLabel, fromUnits);
+      fromUnitComboBoxLayout.getChildren().addAll(fromUnitsLabel, fromUnitsComboBox);
       fromUnitComboBoxLayout.setAlignment(Pos.BASELINE_CENTER);
+
+       fromUnitsComboBox.setOnAction(e-> fromUnitsComboBox_OnChange());
 
       return fromUnitComboBoxLayout;
    }
 
-   private VBox BuildToUnitComboBoxLayout() {
+   private VBox ToUnitComboBoxLayout() {
 
       Label toUnitsLabel = new Label();
 
       VBox toUnitComboBoxLayout = new VBox(0);
 
       toUnitsLabel.setText("To");
-      toUnits.setMinWidth(120);
+      toUnitsLabel.getStyleClass().add("label-general");
+
+      toUnitsComboBox.setMinWidth(120);
 
 
-      toUnitComboBoxLayout.getChildren().addAll(toUnitsLabel, toUnits);
+      toUnitComboBoxLayout.getChildren().addAll(toUnitsLabel, toUnitsComboBox);
       toUnitComboBoxLayout.setAlignment(Pos.BASELINE_CENTER);
+
+       toUnitsComboBox.setOnAction( e-> toUnitComboBox_OnChange());
 
       return toUnitComboBoxLayout;
    }
 
-   private VBox BuildPrecisionComboBoxLayout(){
+   private VBox PrecisionComboBoxLayout(){
 
       Label precisionLabel = new Label();
-      ComboBox precisionInputBox = new ComboBox();
+      precisionComboBox = new ComboBox();
       VBox precisionBoxLayout = new VBox(0);
-      precisionBoxLayout.setMargin(precisionLabel,new Insets(20));
+     precisionBoxLayout.setMargin(precisionLabel,new Insets(20));
 
       precisionLabel.setText("Precision");
-      precisionInputBox.setMinWidth(100);
+      precisionLabel.getStyleClass().add("label-general");
 
-      precisionBoxLayout.getChildren().addAll(precisionLabel,precisionInputBox);
+      precisionComboBox.setMinWidth(100);
+
+      precisionBoxLayout.getChildren().addAll(precisionLabel, precisionComboBox);
       precisionBoxLayout.setAlignment(Pos.BASELINE_CENTER);
 
-       precisionInputBox.getItems().addAll("0","0.1","0.123","0.1234","0.12345");
-       precisionInputBox.setValue("0");
+       precisionComboBox.getItems().addAll("0","0.1","0.123","0.1234","0.12345","0.123456");
+       precisionComboBox.setValue("0");
+
+       precisionComboBox.setOnAction(e-> PrecisionComboBox_OnChange());
 
       return precisionBoxLayout;
    }
 
-   private VBox BuildValueInputBoxLayout(){
+   private VBox InputBoxLayout(){
 
-      Label inputUnitsLabel = new Label("Input Units");
+      inputUnitsLabel = new Label("Input Units");
+      inputUnitsLabel.getStyleClass().add("label-inputAndResultsUnits");
 
-      TextField valueInputBox = new TextField();
+
+      valueInputBox = new TextField();
       valueInputBox.setEditable(true);
-      valueInputBox.setPrefWidth(100);
-      VBox valueInputBoxLayout = new VBox(0);
+      valueInputBox.setMaxWidth(100);
+      valueInputBox.getStyleClass().add("label-results");
+      VBox valueInputBoxLayout = new VBox(8);
 
-      valueInputBoxLayout.setAlignment(Pos.BASELINE_CENTER);
-      valueInputBoxLayout.setPadding(new Insets(0,0,0,20));
+      valueInputBoxLayout.setAlignment(Pos.TOP_CENTER);
+      valueInputBoxLayout.setPadding(new Insets(5,0,0,20));
       valueInputBoxLayout.getChildren().addAll(inputUnitsLabel,valueInputBox);
+
+       valueInputBox.setOnAction(event -> InputBox_OnChange());
 
 
       return valueInputBoxLayout;
    }
 
-   private VBox BuildResultsLayout(){
+   private VBox ResultsLayout(){
 
-        Label resultUnitsLabel = new Label("Results: "+"Units");
+        resultUnitsLabel = new Label("Results: "+"Units");
         resultUnitsLabel.setAlignment(Pos.BASELINE_CENTER);
+        resultUnitsLabel.getStyleClass().add("label-inputAndResultsUnits");
 
-        Label results = new Label("Results");
+
+        resultsLabel = new Label("Results");
+        resultsLabel.getStyleClass().add("label-results");
 
 
-        VBox resultLabelLayout = new VBox(0);
+        VBox resultLabelLayout = new VBox(10);
 
 
         resultLabelLayout.setPadding(new Insets(0,20,0,0));
         resultLabelLayout.setAlignment(Pos.BASELINE_CENTER);
-        resultLabelLayout.getChildren().addAll(resultUnitsLabel,results);
+        resultLabelLayout.getChildren().addAll(resultUnitsLabel, resultsLabel);
 
         return resultLabelLayout;
     }
 
-   private VBox BuildConversionFormulaLayout(){
+   private HBox InputAndResultsLayout(){
+
+        // BorderPane inputAndResultsLayout = new BorderPane();
+        HBox inputAndResultsLayout = new HBox(0);
+        // inputAndResultsLayout.setPadding(new Insets(10,0,0,0));
+        Region spacerNode = new Region();
+        spacerNode.setPadding(new Insets(0,10,0,10));
+        HBox.setHgrow(spacerNode, Priority.ALWAYS);
+
+        //inputAndResultsLayout.setLeft(InputBoxLayout());
+        // inputAndResultsLayout.setRight(ResultsLayout());
+
+        inputAndResultsLayout.setPadding(new Insets(30,0,0,0));
+        inputAndResultsLayout.getChildren().addAll( InputBoxLayout(),spacerNode, ResultsLayout());
+
+        //HBox.setMargin(InputBoxLayout(),new Insets(0,80,0,80));
+        //HBox.setMargin(InputBoxLayout(),new Insets(0,80,0,0));
+
+
+        return inputAndResultsLayout;
+    }
+
+   private VBox ConversionFormulaLayout(){
 
       Label conversionFormulaLabel = new Label("Conversion Formula");
-      Label conversionFormula = new Label();
+      conversionFormulaLabel.getStyleClass().addAll("label-general","label-conversionFormula");
+
+      conversionFormula = new Label();
 
       VBox conversionFormulaLayout = new VBox(10);
 
@@ -249,35 +305,21 @@ import java.util.ArrayList;
 
    }
 
-   private HBox InputAndResultsLayout(){
-      HBox inputAndResultsLayout = new HBox();
-       inputAndResultsLayout.setPadding(new Insets(10,0,0,0));
-       Region spacerNode = new Region();
-       spacerNode.setPadding(new Insets(0,10,0,10));
-       HBox.setHgrow(spacerNode, Priority.ALWAYS);
-
-      inputAndResultsLayout.getChildren().addAll(BuildValueInputBoxLayout(), spacerNode, BuildResultsLayout());
-
-       HBox.setMargin(BuildValueInputBoxLayout(),new Insets(0,0,0,80));
-       HBox.setMargin(BuildValueInputBoxLayout(),new Insets(0,80,0,0));
-
-
-      return inputAndResultsLayout;
-   }
-
-    private HBox CalculateAndSwapButtonLayout(){
+   private HBox CalculateAndSwapButtonLayout(){
         HBox calculateAndSwapButtonLayout = new HBox(20);
 
         Button swapButton = new Button("Swap Units");
         Button calculate = new Button("Calculate");
         Region spacerNode = new Region();
 
-        calculateAndSwapButtonLayout.setPadding(new Insets(20,10,20,10));
+        calculateAndSwapButtonLayout.setPadding(new Insets(0,10,20,10));
         spacerNode.setPadding(new Insets(0,20,0,20));
         HBox.setHgrow(spacerNode,Priority.ALWAYS);
         swapButton.setPrefHeight(40);
         calculate.setPrefHeight(40);
 
+        swapButton.setOnAction(e-> SwapButton_OnClick());
+        calculate.setOnAction(e-> Calculate_OnClick());
 
 
         calculateAndSwapButtonLayout.getChildren().addAll(swapButton,spacerNode,calculate);
@@ -288,10 +330,12 @@ import java.util.ArrayList;
 
 
 
+
    private void CalPlannerMenu_OnClick(){
 
       mainWindow.setScene(SceneBuilder.BuildCalPlannerScene(mainWindow));
    }
+
    private void LinearMenuItem_OnClick(){
 
         ArrayList<String> linearUnits = new ArrayList<>() ;
@@ -304,16 +348,18 @@ import java.util.ArrayList;
         linearUnits.add("Millimeters");
 
 
-       fromUnits.getItems().clear();
-       toUnits.getItems().clear();
-       fromUnits.getItems().addAll(linearUnits);
-       toUnits.getItems().addAll(linearUnits);
-       fromUnits.setValue(linearUnits.get(0));
-       toUnits.setValue(linearUnits.get(0));
+       InitializeUnitChange();
+
+       fromUnitsComboBox.getItems().addAll(linearUnits);
+       toUnitsComboBox.getItems().addAll(linearUnits);
+       fromUnitsComboBox.setValue(linearUnits.get(0));
+       toUnitsComboBox.setValue(linearUnits.get(0));
 
        applicationTitle.setText("Linear Conversion");
+       conversionType = "Linear";
 
     }
+
    private void VolumeMenuItem_OnClick(){
 
         ArrayList <String> volumeUnits = new ArrayList<>();
@@ -325,38 +371,46 @@ import java.util.ArrayList;
         volumeUnits.add("Cubic Centimeters");
         volumeUnits.add("Cubic Millimeters");
 
-        fromUnits.getItems().clear();
-        toUnits.getItems().clear();
-        fromUnits.getItems().addAll(volumeUnits);
-        toUnits.getItems().addAll(volumeUnits);
+        InitializeUnitChange();
 
-       fromUnits.setValue(volumeUnits.get(0));
-       toUnits.setValue(volumeUnits.get(0));
+        fromUnitsComboBox.getItems().addAll(volumeUnits);
+
+        toUnitsComboBox.getItems().addAll(volumeUnits);
+
+       fromUnitsComboBox.setValue(volumeUnits.get(0));
+       toUnitsComboBox.setValue(volumeUnits.get(0));
 
        applicationTitle.setText("Volume Conversion");
+       conversionType = "Volume";
+
 
    }
+
    private void MassMenuItem_OnClick(){
 
         ArrayList<String> massUnits = new ArrayList<>();
 
-        massUnits.add("Tones");
+        massUnits.add("Tons");
         massUnits.add("Pounds");
         massUnits.add("Ounces");
         massUnits.add("Tonnes");
         massUnits.add("Kilograms");
         massUnits.add("Grams");
 
-        fromUnits.getItems().clear();
-        toUnits.getItems().clear();
-        fromUnits.getItems().addAll(massUnits);
-        toUnits.getItems().addAll(massUnits);
 
-       fromUnits.setValue(massUnits.get(0));
-       toUnits.setValue(massUnits.get(0));
+        InitializeUnitChange();
+
+        fromUnitsComboBox.getItems().addAll(massUnits);
+        toUnitsComboBox.getItems().addAll(massUnits);
+
+       fromUnitsComboBox.setValue(massUnits.get(0));
+       toUnitsComboBox.setValue(massUnits.get(0));
 
        applicationTitle.setText("Mass Conversion");
+       conversionType = "Mass";
+
     }
+
    private void TemperatureMenuItem_OnClick(){
 
         ArrayList <String> tempUnits = new ArrayList<>();
@@ -365,21 +419,127 @@ import java.util.ArrayList;
         tempUnits.add("Celsius");
         tempUnits.add("Kelvin");
 
-        fromUnits.getItems().clear();
-        toUnits.getItems().clear();
+        InitializeUnitChange();
 
-        fromUnits.getItems().addAll(tempUnits);
-        toUnits.getItems().addAll(tempUnits);
+        fromUnitsComboBox.getItems().addAll(tempUnits);
+        toUnitsComboBox.getItems().addAll(tempUnits);
 
-       fromUnits.setValue(tempUnits.get(0));
-       toUnits.setValue(tempUnits.get(0));
+       fromUnitsComboBox.setValue(tempUnits.get(0));
+       toUnitsComboBox.setValue(tempUnits.get(0));
 
        applicationTitle.setText("Temperature Conversion");
+       conversionType = "Temperature";
+
+    }
+
+   private void fromUnitsComboBox_OnChange(){
+
+       if (fromUnitsComboBox.getValue() != null){
+             inputUnitsLabel.setText(fromUnitsComboBox.getValue().toString());
+
+             if (IsNumber(valueInputBox.getText())) {
+               CalculateResults();
+
+           }
+
+       }
+
+    }
+
+    private void toUnitComboBox_OnChange(){
+
+      if (toUnitsComboBox.getValue()!=null) {
+          resultUnitsLabel.setText(toUnitsComboBox.getValue().toString());
+
+          if (IsNumber(valueInputBox.getText())) {
+              CalculateResults();
+          }
+      }
+
+    }
+
+    private void PrecisionComboBox_OnChange(){
+        if (fromUnitsComboBox != null && toUnitsComboBox != null && IsNumber(valueInputBox.getText())){
+            CalculateResults();
+        }
+    }
+
+    private void Calculate_OnClick(){
+        inputUnitsLabel.setText("Calc");
+        CalculateResults();
+    }
+
+    private void InputBox_OnChange(){
+
+        if (IsNumber(valueInputBox.getText())) {
+            CalculateResults();
+        }
     }
 
    private void AboutMenu_OnClick(){
 
       MessageBox.show("about selected", "Message Box");
+   }
+
+   private void SwapButton_OnClick(){
+
+       if (fromUnitsComboBox.getValue()!=null && toUnitsComboBox.getValue()!=null && IsNumber(valueInputBox.getText())) {
+           String tempString = fromUnitsComboBox.getValue().toString();
+           fromUnitsComboBox.setValue(toUnitsComboBox.getValue().toString());
+           toUnitsComboBox.setValue(tempString);
+           inputUnitsLabel.setText(fromUnitsComboBox.getValue().toString());
+           resultUnitsLabel.setText(toUnitsComboBox.getValue().toString());
+       }
+   }
+
+
+    private void InitializeUnitChange(){
+        fromUnitsComboBox.getItems().clear();
+        toUnitsComboBox.getItems().clear();
+        valueInputBox.clear();
+        resultsLabel.setText("");
+        conversionFormula.setText("");
+    }
+
+   private void CalculateResults(){
+
+       String fromUnits = fromUnitsComboBox.getValue().toString();
+       String toUnits = toUnitsComboBox.getValue().toString();
+       String precision = precisionComboBox.getValue().toString();
+       String inputValue = valueInputBox.getText();
+       String answer;
+       String formula;
+       String selectedFormat;
+
+       UnitConverter unitConverter = new UnitConverter(inputValue,fromUnits,toUnits,conversionType,precision);
+       answer = unitConverter.convertUnits();
+       formula = unitConverter.getFormula(answer);
+       selectedFormat = "%,"+unitConverter.setPrecision("" + precision)+"f";
+
+
+       try {
+          resultsLabel.setText(String.format(selectedFormat,Double.parseDouble(answer)));
+          conversionFormula.setText(formula);
+
+       }
+       catch (Exception e){
+
+           System.out.println("Error in calculate method");
+       }
+   }
+
+   private boolean IsNumber(String testNumber){
+
+       boolean isNumber = true;
+       try{
+           Integer.parseInt(testNumber);
+       }
+       catch (Exception e){
+           isNumber = false;
+
+       }
+
+       return isNumber;
    }
 
 }

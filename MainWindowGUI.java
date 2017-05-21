@@ -25,8 +25,8 @@ import javafx.stage.Stage;
         javafx.scene.control.Label splashScreen;
         //Method Variables
 
-        int mainWindowWidth = 300;
-        int mainWindowHeight = 300;
+        int mainWindowWidth = 400;
+        int mainWindowHeight = 400;
 
         //Initialize Main Window Components
         splashScreen = new javafx.scene.control.Label("SplashScreen");

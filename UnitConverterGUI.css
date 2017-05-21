@@ -1,0 +1,39 @@
+.label-inputAndResultsUnits
+{
+	-fx-font-size: 12pt;
+	-fx-text-fill: cadetblue;
+	-fx-font-weight:bold;
+	
+		
+}
+
+.label-results
+{
+
+	-fx-font-size: 10pt;
+	-fx-font-weight:bold;	
+	
+	
+}
+
+.label-applicationTitle
+{
+
+	-fx-font-size: 16pt;
+	-fx-text-fill: cadetblue;
+	-fx-font-weight: bold;
+}
+
+.label-general
+
+{
+
+	-fx-font-weight:bold;
+
+}
+
+.label-conversionFormula
+
+{
+	-fx-text-fill: cadetblue;
+}
