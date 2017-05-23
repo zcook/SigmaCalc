@@ -68,11 +68,6 @@ import java.util.ArrayList;
         mainWindow.setMinHeight(420);
         mainWindow.setMinWidth(400);
 
-        mainWindow.setMaxHeight(450);
-        mainWindow.setMaxWidth(430);
-        mainWindow.setResizable(false);
-
-
 
        return UnitConverterScene;
 

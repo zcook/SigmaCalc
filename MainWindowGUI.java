@@ -26,7 +26,7 @@ import javafx.stage.Stage;
         //Method Variables
 
         int mainWindowWidth = 400;
-        int mainWindowHeight = 400;
+        int mainWindowHeight = 420;
 
         //Initialize Main Window Components
         splashScreen = new javafx.scene.control.Label("SplashScreen");
@@ -36,6 +36,7 @@ import javafx.stage.Stage;
         startSceneBorderLayout.setTop(BuildMenuBar());
         startSceneBorderLayout.setCenter(splashScreen);
         startScene = new Scene(startSceneBorderLayout,mainWindowWidth,mainWindowHeight);
+        mainWindow.setResizable(false);
 
         return startScene;
 
