@@ -1,7 +1,6 @@
 
 import java.time.Year;
 import java.util.Calendar;
-import java.util.StringJoiner;
 
 
 /**
@@ -36,7 +35,7 @@ import java.util.StringJoiner;
 
     // Date Parsing Variables
     private int[] parsedMonthDayYear = new int[3];
-    private int[] inferredYearMonthDayYear = new int[3];
+    private int[] inferredMonthDayYear = new int[3];
     private String formattedInputDate = "";
     private String formattedEndInputDate = "";
     private String formattedStartInputDate = "";
@@ -299,9 +298,9 @@ import java.util.StringJoiner;
 
                 //Try to parse array elements as integers if it fails the user entered non-numeric characters
                 try {
-                    inferredYearMonthDayYear[0] = Integer.parseInt(parsedDate[0]);
-                    inferredYearMonthDayYear[1] = Integer.parseInt(parsedDate[1]);
-                    inferredYearMonthDayYear[2] = Year.now().getValue();
+                    inferredMonthDayYear[0] = Integer.parseInt(parsedDate[0]);
+                    inferredMonthDayYear[1] = Integer.parseInt(parsedDate[1]);
+                    inferredMonthDayYear[2] = Year.now().getValue();
                 }
 
                 //if the user input non-numeric characters, such as Jan, prompts them with a dialog describing
@@ -327,12 +326,12 @@ import java.util.StringJoiner;
         if (parsedDate.length == 2){
 
             InferCurrentYear(parsedDate);
-            month = inferredYearMonthDayYear[0];
-            day = inferredYearMonthDayYear[1];
-            year = inferredYearMonthDayYear[2];
+            month = inferredMonthDayYear[0];
+            day = inferredMonthDayYear[1];
+            year = inferredMonthDayYear[2];
 
             for (int i=0; i<3; i++){
-                inferredYearMonthDayYear[i]=0;
+                inferredMonthDayYear[i]=0;
             }
 
         }
@@ -360,12 +359,12 @@ import java.util.StringJoiner;
             else if (parsedDate.length == 2){
 
                 InferCurrentYear(parsedDate);
-                month = inferredYearMonthDayYear[0];
-                day = inferredYearMonthDayYear[1];
-                year = inferredYearMonthDayYear[2];
+                month = inferredMonthDayYear[0];
+                day = inferredMonthDayYear[1];
+                year = inferredMonthDayYear[2];
 
                 for (int i=0; i<3; i++){
-                    inferredYearMonthDayYear[i]=0;
+                    inferredMonthDayYear[i]=0;
                 }
             }
             else{
