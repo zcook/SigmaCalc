@@ -5,12 +5,23 @@
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
- class MainWindowGUI {
+
+
+class MainWindowGUI {
 
     private Stage mainWindow;
+    private String splashScreenPath = "file:C:\\Users\\Zane\\Dropbox\\Misc\\Electronics & Computer Science\\Java\\JavaPrograms\\SigmaCalc\\Images\\SigmaCalc Spash Screen Logo.png";
+    private Image splahScreenImage = new Image(splashScreenPath);
+    ImageView splashScreen = new ImageView(splahScreenImage);
 
     Scene BuildMainWindowGUI(Stage window){
 
@@ -22,14 +33,13 @@ import javafx.stage.Stage;
         BorderPane startSceneBorderLayout;
 
 
-        javafx.scene.control.Label splashScreen;
         //Method Variables
 
         int mainWindowWidth = 400;
         int mainWindowHeight = 420;
 
         //Initialize Main Window Components
-        splashScreen = new javafx.scene.control.Label("SplashScreen");
+       // splashScreen = new javafx.scene.control.Label("SplashScreen");
         startSceneBorderLayout = new BorderPane();
 
         //Build Scene

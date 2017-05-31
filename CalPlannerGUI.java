@@ -38,6 +38,8 @@ import java.util.ArrayList;
     private ComboBox numberOfWorkDaysComboBox;
     private Boolean isFromStartDate = false;
     private Boolean isFromEndDate = false;
+    private Boolean isWorkDayPlanner = false;
+    private Boolean isLeadTimePlanner = false;
 
     BorderPane startSceneBorderLayout;
 
@@ -119,7 +121,7 @@ import java.util.ArrayList;
 
         Separator answerSeparator = new Separator();
 
-        VBox leadTimeUserInterface = new VBox(15);
+        VBox leadTimeUserInterface = new VBox(13);
         leadTimeUserInterface.setAlignment(Pos.TOP_CENTER);
 
 
@@ -137,6 +139,7 @@ import java.util.ArrayList;
 
         fromStartDateRadioButton.setSelected(true);
         FromStartDateRadioButton_OnSelect();
+        isLeadTimePlanner = true;
 
         return leadTimeUserInterface;
     }
@@ -153,10 +156,10 @@ import java.util.ArrayList;
         results.setAlignment(Pos.TOP_CENTER);
 
         workDayUserInterface.setAlignment(Pos.TOP_CENTER);
-        workDayUserInterface.setPadding(new Insets(20,20,20,20));
+
 
         workDayUserInterface.getChildren().add(applicationTitle);
-        applicationTitle.setPadding(new Insets(0,0,10,0));
+        applicationTitle.setPadding(new Insets(10,0,10,0));
         workDayUserInterface.getChildren().add(DatePickerLayout());
 
 
@@ -166,6 +169,9 @@ import java.util.ArrayList;
 
 
         workDayUserInterface.getChildren().add(calculateButton);
+
+        calculateButton.setOnAction(e-> WorkDayCalculate_OnClick());
+        calculateButton.setOnKeyPressed(e-> WorkDayCalculate_OnEnter(e));
 
         return workDayUserInterface;
 
@@ -199,6 +205,7 @@ import java.util.ArrayList;
 
 
         fromStartDateInputBox = new TextField();
+        fromStartDateInputBox.setMinWidth(100);
 
         HBox fromDateInputLayout = new HBox(0);
         fromDateInputLayout.setAlignment(Pos.CENTER);
@@ -243,6 +250,7 @@ import java.util.ArrayList;
         toDatePicker.setFocusTraversable(false);
 
         fromEndDateInputBox = new TextField();
+        fromEndDateInputBox.setMinWidth(100);
 
         HBox toDateInputLayout = new HBox(0);
         toDateInputLayout.setAlignment(Pos.CENTER);
@@ -339,6 +347,8 @@ import java.util.ArrayList;
         fromStartDateRadioButton.setOnAction(e-> FromStartDateRadioButton_OnSelect());
         fromEndDateRadioButton.setOnAction(e-> FromEndDateRadioButton_OnSelect());
 
+
+
         return selectionLayout;
     }
 
@@ -357,6 +367,7 @@ import java.util.ArrayList;
 
         HBox buttonLayout = new HBox(20);
         buttonLayout.setAlignment(Pos.CENTER);
+        buttonLayout.setPadding(new Insets(0,0,10,0));
 
         buttonLayout.getChildren().addAll(stepButton,spacerNode,calculateButton);
         calculateButton.setOnAction(e-> LeadTimeCalculate_OnClick());
@@ -387,6 +398,10 @@ import java.util.ArrayList;
         workDayComboBoxLayout.setPadding(new Insets(10,0,20,0));
         workDayComboBoxLayout.getChildren().addAll(numberOfWorkDaysLabel,numberOfWorkDaysComboBox);
 
+
+        numberOfWorkDaysComboBox.setValue("5");
+        numberOfWorkDaysComboBox.setOnAction(e->  NumberOfWorkDaysComboBox_OnChange());
+
         return workDayComboBoxLayout;
     }
 
@@ -407,14 +422,21 @@ import java.util.ArrayList;
     private void WorkDayPlannerMenu_OnClick(){
         startSceneBorderLayout.setCenter(WorkDayUserInterface());
         applicationTitle.setText("Work Day Planner");
+        results.setText("Results");
+        isLeadTimePlanner = false;
+        isWorkDayPlanner = true;
 
     }
 
     private void LeadTimePlannerMenu_OnClick(){
         startSceneBorderLayout.setCenter(LeadTimeUserInterface());
         applicationTitle.setText("Lead Time Planner");
-        isFromStartDate = false;
+        results.setText("Results");
+        isFromStartDate = true;
         isFromEndDate = false;
+
+        isWorkDayPlanner = false;
+        isLeadTimePlanner = true;
     }
 
     private void FromStartDateRadioButton_OnSelect(){
@@ -426,6 +448,10 @@ import java.util.ArrayList;
         fromDatePicker.setDisable(false);
         fromEndDateInputBox.setDisable(true);
         toDatePicker.setDisable(true);
+        fromStartDateInputBox.requestFocus();
+
+        weeksInputBox.setText("0");
+        daysInputBox.setText("0");
 
     }
 
@@ -438,7 +464,10 @@ import java.util.ArrayList;
         fromDatePicker.setDisable(true);
         fromEndDateInputBox.setDisable(false);
         toDatePicker.setDisable(false);
+        fromEndDateInputBox.requestFocus();
 
+        weeksInputBox.setText("0");
+        daysInputBox.setText("0");
 
     }
 
@@ -446,18 +475,38 @@ import java.util.ArrayList;
 
         if (isFromStartDate){
             CalculateLeadTime(fromStartDateInputBox.getText());
+
         }
 
         else if (isFromEndDate){
             CalculateLeadTime (fromEndDateInputBox.getText());
         }
 
+        stepButton.requestFocus();
 
 
     }
 
+    private void WorkDayCalculate_OnClick(){
+
+        CalculateWorkDays();
+
+    }
+
+    private void WorkDayCalculate_OnEnter(KeyEvent e){
+
+        if (e.getCode()==KeyCode.ENTER){
+            CalculateWorkDays();
+        }
+    }
+
+    private void NumberOfWorkDaysComboBox_OnChange(){
+        CalculateWorkDays();
+    }
+
     private void StepButton_OnClick(){
 
+        StepLeadTime();
     }
 
     private void StepButton_OnEnter(KeyEvent e){
@@ -486,28 +535,37 @@ import java.util.ArrayList;
 
         if (e.getCode() == KeyCode.ENTER){
 
-            if (IsNumber(weeksInputBox.getText())&&IsNumber(daysInputBox.getText())){
-                if (isFromStartDate){
-                    CalculateLeadTime(fromStartDateInputBox.getText());
+            if (isLeadTimePlanner) {
+
+                if (IsNumber(weeksInputBox.getText()) && IsNumber(daysInputBox.getText())) {
+                    if (isFromStartDate) {
+                        CalculateLeadTime(fromStartDateInputBox.getText());
+                    } else if (isFromEndDate) {
+                        CalculateLeadTime(fromEndDateInputBox.getText());
+                    }
                 }
-                else if (isFromEndDate){
-                    CalculateLeadTime(fromEndDateInputBox.getText());
-                }
-            }
 
                 if (weeksInputBox.isFocused() || daysInputBox.isFocused()) {
                     stepButton.requestFocus();
                 }
+            }
 
-                if (fromStartDateInputBox.isFocused()){
+
+
+            if (fromStartDateInputBox.isFocused()){
 
                 ParseStartDate();
-                }
+            }
 
-                if (fromEndDateInputBox.isFocused()){
+            if (fromEndDateInputBox.isFocused()){
 
-                    ParseEndDate();
-                }
+                ParseEndDate();
+            }
+
+            if (isWorkDayPlanner){
+
+                CalculateWorkDays();
+            }
 
         }
     }
@@ -597,6 +655,15 @@ import java.util.ArrayList;
 
         fromEndDateInputBox.setText(ParseInput(fromEndDateInputBox.getText(),"End"));
     }
+
+    private void CalculateWorkDays(){
+
+        CalPlanner cpWordDayCalculator = new CalPlanner(fromStartDateInputBox.getText(),fromEndDateInputBox.getText());
+       results.setText(cpWordDayCalculator.getWorkDays(numberOfWorkDaysComboBox.getValue().toString()));
+
+    }
+
+
 
 }
 
